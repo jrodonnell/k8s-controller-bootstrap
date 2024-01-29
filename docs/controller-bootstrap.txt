@@ -41,16 +41,13 @@ controller:
 		handler (handcrafted)
 			- compares actual state (Status field) with desired, attempts to converge the two, then updates the Status field
 
-	
-
-
 
 
 Go construct		< -- >		Controller construct
 client-go/tools/cache			Reflector
-	Lister							query k8s-apiserver and list all resources of a given type
-	Watcher							watch those resources for changes
-	Store							DeltaFIFO queue
+	Lister					query k8s-apiserver and list all resources of a given type
+	Watcher					watch those resources for changes
+	Store					DeltaFIFO queue
 
 
 controller constructor workflow (func NewController(...)):
@@ -62,11 +59,12 @@ controller inner execution workflow (func (c *Controller) Run(...)):
 	1. defer error exit handling calls
 	2. [opinion] install CRDs
 	3. start Informer factories (one for each Informer) to begin populating Informer caches and wait for them to sync
-	4. launch workers (infite loop of processing items on workqueue)
+	4. launch workers (infinite loop of processing items on workqueue)
 	
 controller outer execution workflow (func main()):
 	1. instantiate k8s and custom clientsets
-	2. create k8s and custom InformerFactorys (because they need a client to be instantiated)
-	3. call NewController()
+	2. create k8s and custom InformerFactorys
+	3. create Controller
 	4. start InformerFactorys
+	5. start Controller
 	
